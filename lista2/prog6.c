@@ -2,12 +2,12 @@
 #include<stdlib.h>
 #include<locale.h>
 int main(int narg, char *argv[]){
-    int div_tres = 0, n, cont = 1, cont_tres = 1;
+    int div_tres = 0, n, cont = 0, cont_tres = 0;
     float media = 0, media_tres = 0;
 
     setlocale(LC_ALL, "Portuguese");
 
-    while(cont_tres <= 10){
+    while(cont_tres < 10){
         printf("Digite um número inteiro: ");
         scanf("%d", &n);
 
@@ -20,6 +20,7 @@ int main(int narg, char *argv[]){
         }
     }
 
+    cont = cont == 0 ? 1 : cont;
     media = media / cont;
     media_tres = media_tres / cont_tres;
 
