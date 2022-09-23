@@ -16,6 +16,8 @@ int main(int narg, char *argv[]){
 
     printf("\nO volume da esfera é %.2lf u.v.\n", volumeDaEsfera(raio));
     printf("A área da esfera é %.2lf u.a.\n", areaDaEsfera(raio));
+
+    return EXIT_SUCCESS;
 }
 
 double volumeDaEsfera(double r){

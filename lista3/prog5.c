@@ -12,6 +12,8 @@ int main(int narg, char *argv[]){
     printf("Entre o expoente: ");
     scanf("%i", &x);
     printf("e elevado a %i é: %.10lf\n", x, potE(x));
+
+    return EXIT_SUCCESS;
 }
 
 int fat(int n){

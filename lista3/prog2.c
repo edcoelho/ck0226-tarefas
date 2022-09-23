@@ -34,4 +34,6 @@ int main(int narg, char *argv[]){
 	distancia = calcularDistancia(x1,y1,z1,x2,y2,z2);
 
 	printf("\nA distância entre os pontos p1(%.1f, %.1f, %.1f) e p2(%.1f,%.1f,%.1f) é %.2f.\n", x1, y1, z1, x2, y2, z2, distancia);
+
+    return EXIT_SUCCESS;
 }

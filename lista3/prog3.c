@@ -24,6 +24,8 @@ int main(int narg, char *argv[]){
     }while(z < 1);
 
     printf("O MDC de %i, %i e %i é %i.\n", x, y, z, mdc(mdc(x,y),z));
+
+    return EXIT_SUCCESS;
 }
 
 int mdc(int a, int b){
