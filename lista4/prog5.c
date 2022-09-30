@@ -2,7 +2,12 @@
 #include<stdlib.h>
 #include<locale.h>
 
-int palindromo(long int num, long int num_inv, long int comp);
+int pot(int b, int e);
+int quantDigitos(long int num);
+int ultimoDigito(long int num);
+int primeiroDigito(long int num);
+long int digitosDoMeio(long int num);
+short int palindromo(long int num);
 
 int main(int narg, char *argv[]) {
     long int x;
@@ -12,7 +17,7 @@ int main(int narg, char *argv[]) {
     printf("Digite um número inteiro positivo de até 7 dígitos: ");
     scanf("%li", &x);
 
-    if(palindromo(x, 0, x))
+    if(palindromo(x))
         printf ("\n%li é um palindromo\n", x);
     else
         printf ("\n%li não é um palindromo\n", x);
@@ -20,18 +25,44 @@ int main(int narg, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-int palindromo(long int num, long int num_inv, long int comp){
-    long int aux;
-  
-    if (num != 0){
-        aux = (int) num % 10;
-        num_inv = num_inv * 10 + aux;
-        num = (int) num / 10;
-        return palindromo(num, num_inv, comp);
-    }else{
-        if(comp == num_inv)
-            return 1;
+int pot(int b, int e){
+    if(e > 0)
+        return b * pot(b, e - 1);
+    else
+        return 1;
+}
+
+int quantDigitos(long int num){
+    if(num >= 10)
+        return 1 + quantDigitos((num - num % 10) / 10);
+    else
+        return 1;
+}
+
+int ultimoDigito(long int num){
+    return num % 10;
+}
+
+int primeiroDigito(long int num){
+    if(num >= 10)
+        return primeiroDigito((num - num % 10) / 10);
+    else
+        return num;
+}
+
+long int digitosDoMeio(long int num){
+    int r;
+    r = num % pot(10, quantDigitos(num) - 1);
+    r = (r - r % 10) / 10;
+    return r;
+}
+
+short int palindromo(long int num){
+    if(num >= 10)
+        if(primeiroDigito(num) == ultimoDigito(num))
+            return palindromo(digitosDoMeio(num));
         else
             return 0;
-    }
+    else
+        return 1;
 }
