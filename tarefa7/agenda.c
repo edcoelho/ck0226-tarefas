@@ -3,65 +3,64 @@
 #include<string.h>
 #include "agenda.h"
 
-void buscar_tel(char nome[], TipoAgenda agenda[]){
-    int i, encontrado = 0;
+void inicializar_agenda(Contato agenda[]){
+    int i;
+
+    for (i = 0; i < MAXREGISTROS; i++)
+        agenda[i].tipo = '\0';
+};
+
+int buscar_reg(Contato agenda[], char nome[]){
+    int i;
 
     for (i = 0; i < MAXREGISTROS; i++) {
         if (strcmp(agenda[i].nome, nome) == 0 && agenda[i].tipo != '\0') {
-            printf("\n%s - (%d) %d ", agenda[i].nome, agenda[i].ddd, agenda[i].telefone);
-            if (agenda[i].tipo == 'C')
-                printf("(celular)\n");
-            else
-                printf("(fixo)\n");
-            encontrado = 1;
+            return i;
         }
     }
-    if (!encontrado)
-        printf("\nContato não encontrado!\n");
+
+    return -1;
 }
 
-void inserir_reg(TipoAgenda reg, TipoAgenda agenda[]){
+int inserir_reg(Contato agenda[], char nome[], int matricula, int ddd, int telefone, char tipo){
     int i = 0, inserido = 0;
 
-    while (i < MAXREGISTROS && !inserido) {
-        if (agenda[i].tipo == '\0') {
-            strcpy(agenda[i].nome, reg.nome);
-            agenda[i].matricula = reg.matricula;
-            agenda[i].ddd = reg.ddd;
-            agenda[i].telefone = reg.telefone;
-            agenda[i].tipo = reg.tipo;
-            inserido = 1;
-        }
+    while (i < MAXREGISTROS && agenda[i].tipo != '\0')
         i++;
+
+    if (i < MAXREGISTROS) {
+        strcpy(agenda[i].nome, nome);
+        agenda[i].matricula = matricula;
+        agenda[i].ddd = ddd;
+        agenda[i].telefone = telefone;
+        agenda[i].tipo = tipo;
+
+        return 1;
     }
 
-    if (inserido)
-        printf("\nContato inserido com sucesso!\n");
-    else
-        printf("\nA agenda está cheia!\n");
+    return 0;
 }
 
-void apagar_reg(char nome[], TipoAgenda agenda[]){
+int apagar_reg(Contato agenda[], char nome[]){
     int i = 0, encontrado = 0;
 
-    while (i < MAXREGISTROS && !encontrado) {
+    while (i < MAXREGISTROS) {
         if (strcmp(agenda[i].nome, nome) == 0 && agenda[i].tipo != '\0') {
             agenda[i].nome[0] = '\0';
             agenda[i].matricula = 0;
             agenda[i].ddd = 0;
             agenda[i].telefone = 0;
             agenda[i].tipo = '\0';
-            encontrado = 1;
+
+            return 1;
         }
         i++;
     }
-    if (encontrado)
-        printf("\nContato removido com sucesso!\n");
-    else
-        printf("\nContato não encontrado!\n");
+
+    return 0;
 }
 
-void listar_nomes(TipoAgenda agenda[]){
+void listar_nomes(Contato agenda[]){
     int i, j = 0; // j serve apenas para contar os registros encontrados
 
     printf("\n-- Lista de nomes --\n");

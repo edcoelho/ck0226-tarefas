@@ -1,18 +1,19 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+#include<locale.h>
 #include "agenda.h"
 
 int main(int narg, char* argv[]){
     FILE* arq;
-    char buff[MAXNOME], acao, nome[MAXNOME], o;
-    int i, continuar = 1, chave_atual = 0; // 0 - matricula, 1 - nome, 2 - ddd, 3 - telefone, 4 - tipo
-    TipoAgenda agenda[MAXREGISTROS], registro;
+    char acao, nome[MAXNOME], o;
+    int i, continuar = 1;
+    Contato agenda[MAXREGISTROS], registro;
 
-    // Iniciar agenda vazia
-    for (i = 0; i < MAXREGISTROS; i++)
-        agenda[i].tipo = '\0';
+    setlocale(LC_ALL, "Portuguese");
+    inicializar_agenda(agenda);
 
+    // Leitura do arquivo
     if (narg > 1) {
         arq = fopen(argv[1], "rt");
         if (arq == NULL) {
@@ -21,42 +22,34 @@ int main(int narg, char* argv[]){
         }
 
         i = 0;
-        while (fscanf(arq, "%s", buff) == 1) {
-            if (chave_atual == 0) {
-                agenda[i].matricula = atoi(buff);
-                chave_atual++;
-            } else if (chave_atual == 1) {
-                strcpy(agenda[i].nome, buff);
-                chave_atual++;
-            } else if (chave_atual == 2) {
-                agenda[i].ddd = atoi(buff);
-                chave_atual++;
-            } else if (chave_atual == 3) {
-                agenda[i].telefone = atoi(buff);
-                chave_atual++;
-            } else {
-                agenda[i].tipo = buff[0];
-                chave_atual = 0;
-                i++;
-            }
-        }
+        while (fscanf(arq, "%d\n%[^\n]\n%d\n%d\n%c", &registro.matricula, registro.nome, &registro.ddd, &registro.telefone, &registro.tipo) != EOF)
+            inserir_reg(agenda, registro.nome, registro.matricula, registro.ddd, registro.telefone, registro.tipo);
 
         fclose(arq);
     }
     
+    // Menu interativo
     do{
         printf("\n-- Agenda Telefônica --");
-        printf("\nB - Buscar telefone\nI - Inserir novo registro\nA - Apagar registro\nL - Listar nomes\nS - Sair\n\n");
+        printf("\nB - Buscar telefone\nI - Inserir novo contato\nA - Apagar contato\nL - Listar nomes\nS - Sair\n\n");
         printf("Selecione uma opção: ");
         scanf(" %c", &acao);
 
         switch(acao) {
+            // Buscar telefone
             case 'B':
             case 'b':
                 printf("\nEntre o nome do contato: ");
                 scanf("%s", nome);
-                buscar_tel(nome, agenda);
+                
+                if ((i = buscar_reg(agenda, nome) >= 0))
+                    printf("\n%s - (%d) %d (%s)\n", agenda[i].nome, agenda[i].ddd, agenda[i].telefone, (agenda[i].tipo == 'C' ? "celular": "fixo"));
+                else
+                    printf("\n%s não foi encontrado!\n", nome);
+
                 break;
+
+            // Inserir novo contato
             case 'I':
             case 'i':
                 printf("\nEntre a matrícula: ");
@@ -85,23 +78,38 @@ int main(int narg, char* argv[]){
                 else if (registro.tipo == 'f')
                     registro.tipo = 'F';
 
-                inserir_reg(registro, agenda);
+                if (inserir_reg(agenda, registro.nome, registro.matricula, registro.ddd, registro.telefone, registro.tipo))
+                    printf("\nContato inserido com sucesso!\n");
+                else
+                    printf("\nNão foi possível inserir o contato porque a agenda está cheia!\n");
 
                 break;
+
+            // Apagar contato
             case 'A':
             case 'a':
                 printf("\nEntre o nome do contato: ");
                 scanf("%s", nome);
-                apagar_reg(nome, agenda);
+
+                if (apagar_reg(agenda, nome))
+                    printf("\nContato removido com sucesso!\n");
+                else
+                    printf("\nContato não foi encontrado!\n");
+
                 break;
+
+            // Listar nomes
             case 'L':
             case 'l':
                 listar_nomes(agenda);
                 break;
+
+            // Sair
             case 'S':
             case 's':
                 continuar = 0;
                 break;
+                
             default:
                 printf("\nOpção inválida!\n", acao);
         }
