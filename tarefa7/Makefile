@@ -1,13 +1,13 @@
 ALL: main
 
 main: main.o agenda.o
-	gcc main.o agenda.o -o main
+	gcc --std=c99 -pedantic-errors main.o agenda.o -o main
 
 main.o: main.c agenda.h
-	gcc -c main.c
+	gcc --std=c99 -pedantic-errors -c main.c
 
 agenda.o: agenda.c agenda.h
-	gcc -c agenda.c
+	gcc --std=c99 -pedantic-errors -c agenda.c
 
 clean:
 	rm -f *.o main

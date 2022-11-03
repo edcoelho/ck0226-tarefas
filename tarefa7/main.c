@@ -17,12 +17,12 @@ int main(int narg, char* argv[]){
     if (narg > 1) {
         arq = fopen(argv[1], "rt");
         if (arq == NULL) {
-            printf("Erro ao abrir o arquivo %s", argv[1]);
+            printf("\nErro ao abrir o arquivo %s\n", argv[1]);
             return EXIT_FAILURE;
         }
 
         i = 0;
-        while (fscanf(arq, "%d\n%[^\n]\n%d\n%d\n%c", &registro.matricula, registro.nome, &registro.ddd, &registro.telefone, &registro.tipo) != EOF)
+        while (fscanf(arq, "%d\n%s\n%d\n%d\n%c", &registro.matricula, registro.nome, &registro.ddd, &registro.telefone, &registro.tipo) != EOF)
             inserir_reg(agenda, registro.nome, registro.matricula, registro.ddd, registro.telefone, registro.tipo);
 
         fclose(arq);
