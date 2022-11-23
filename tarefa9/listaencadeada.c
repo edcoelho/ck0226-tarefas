@@ -6,7 +6,7 @@
 void inserir(Contato **agenda, int matricula, char nome[], int ddd, int telefone, char tipo) {
     Contato *novo, *anterior = NULL, *inicio = *agenda;
 
-    novo = (Contato *) malloc(sizeof(Contato *));
+    novo = (Contato *) malloc(sizeof(Contato));
     novo->matricula = matricula;
     strcpy(novo->nome, nome);
     novo->ddd = ddd;

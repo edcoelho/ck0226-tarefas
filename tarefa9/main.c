@@ -13,18 +13,11 @@ int main(int narg, char *argv[]){
     setlocale(LC_ALL, "Portuguese");
 
     // Leitura do arquivo
-    if (narg > 1) {
-        arq = fopen(argv[1], "rt");
-        if (arq == NULL) {
-            printf("Erro ao abrir o arquivo %s", argv[1]);
+    if (narg > 1)
+        if (!carregar(&agenda, argv[1])) {
+            printf("Erro ao abrir o arquivo %s\n", argv[1]);
             return EXIT_FAILURE;
         }
-
-        while (fscanf(arq, "%d\n%s\n%d\n%d\n%c", &registro.matricula, registro.nome, &registro.ddd, &registro.telefone, &registro.tipo) != EOF)
-            inserir(&agenda, registro.matricula, registro.nome, registro.ddd, registro.telefone, registro.tipo);
-
-        fclose(arq);
-    }
     
     // Menu interativo
     do{
